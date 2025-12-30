@@ -1,7 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
-const dotenv = require('dotenv');
+import express from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -14,9 +14,19 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 
-// route
+// dummy data
+const expenses = [
+  { id: 1, title: "Tea", amount: 20 },
+  { id: 2, title: "Lunch", amount: 150 }
+];
+
+// routes
 app.get("/", (req, res) => {
   res.send("Hello World");
+});
+
+app.get("/api/expenses", (req, res) => {
+  res.json(expenses);
 });
 
 // port
