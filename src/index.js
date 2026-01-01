@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import connectDB from './db/index.js';
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
+
+connectDB();
 
 // dummy data
 const expenses = [
