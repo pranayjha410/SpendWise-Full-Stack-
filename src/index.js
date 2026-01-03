@@ -1,21 +1,26 @@
-import express from 'express';
-import cors from 'cors';
-import morgan from 'morgan';
+
 import dotenv from 'dotenv';
 import connectDB from './db/index.js';
 
 dotenv.config();
 
-// rest object
-const app = express();
 
-// middleware
-app.use(express.json());
-app.use(cors());
-app.use(morgan('dev'));
-app.use(express.urlencoded({ extended: true }));
 
-connectDB();
+connectDB()
+.then(() =>{
+
+  // port
+  const PORT = process.env.PORT || 3000;
+  // listen
+  app.listen(PORT, () => {
+  console.log(` Server Working on Port ${PORT}`);
+})
+
+
+})
+.catch((error) =>{
+  console.log("MongoDb Error:",error)
+})
 
 // dummy data
 const expenses = [
@@ -32,10 +37,7 @@ app.get("/api/expenses", (req, res) => {
   res.json(expenses);
 });
 
-// port
-const PORT = process.env.PORT || 3000;
 
-// listen
-app.listen(PORT, () => {
-  console.log(`🚀 Server Working on Port ${PORT}`);
-});
+
+
+
