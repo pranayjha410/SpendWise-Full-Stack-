@@ -1,11 +1,34 @@
 import React from 'react'
-
+import {BrowserRouter as Router, Routes, Route,Navigate } from "react-router-dom";
+import Login from './pages/Auth/Login';
+import SignUp from './pages/Auth/SignUp';
+import Home from './pages/Dashboard/Home';
+import Expense from './pages/Dashboard/Expense'
+import Income from './pages/Dashboard/Income';
 const App = () => {
   return (
-    <div className='text-9xl'>
-      APP
+    <div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Root />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/signup" element={<SignUp />}></Route>
+          <Route path="/dashboard" element={<Home />}></Route>
+          <Route path="/expense" element={<Expense />}></Route>
+          <Route path="/income" element={<Income />}></Route>
+        
+        </Routes>
+      </Router>
     </div>
   )
 }
 
 export default App
+
+
+function Root() {
+  const isAuthentication = localStorage.getItem("token") ? true : false;
+
+  return isAuthentication ? (<Navigate to="/dashboard" />) : (<Navigate to="/login" />) ;
+}
+
