@@ -16,13 +16,13 @@ const AuthLayout = ({ children }) => {
   return (
     <div className="flex h-screen">
       {/* LEFT SIDE */}
-      <div className="w-full md:w-2/3 flex flex-col justify-center px-8 lg:px-16">
+       <div className="w-full md:w-[60%] flex flex-col justify-center px-8 lg:px-16">
         <h2 className="text-xl font-semibold mb-6">Spend Wise</h2>
         {children}
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="hidden md:flex w-1/3 bg-orange-100 items-center justify-center relative overflow-hidden">
+       <div className="hidden md:flex w-[40%] bg-orange-100 items-center justify-center relative overflow-hidden">
         {/* Decorative boxes */}
         <div className="w-40 h-40 rounded-[40px]  bg-orange-500 absolute -top-10 -left-10"></div>
         <div className="w-40 h-40 rounded-[40px] border-4 border-green-500 absolute top-20 right-10"></div>
