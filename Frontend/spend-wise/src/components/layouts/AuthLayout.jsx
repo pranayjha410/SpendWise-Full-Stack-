@@ -2,10 +2,9 @@ import React from "react";
 import Login_img from "../../assets/images/img1.jpg";
 import { GoGraph } from "react-icons/go";
 
-// Small reusable component
 const InfoIcon = ({ icon, label }) => {
   return (
-    <div className="flex items-center gap-3 bg-white p-3 rounded-xl shadow-md">
+    <div className="flex items-center gap-3 bg-white/90 backdrop-blur-md p-3 rounded-xl shadow-md">
       <div className="text-xl">{icon}</div>
       <p className="text-sm font-medium text-gray-700">{label}</p>
     </div>
@@ -14,32 +13,50 @@ const InfoIcon = ({ icon, label }) => {
 
 const AuthLayout = ({ children }) => {
   return (
-    <div className="flex h-screen">
-      {/* LEFT SIDE */}
-       <div className="w-full md:w-[60%] flex flex-col justify-center px-8 lg:px-16">
-        <h2 className="text-xl font-semibold mb-6">Spend Wise</h2>
+    <div className="flex min-h-screen flex-col md:flex-row">
+
+      {/* LEFT */}
+      <div className="w-full md:w-[55%] lg:w-[60%] flex flex-col justify-center px-4 sm:px-8 lg:px-16 py-8">
+        
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">
+          Spend Wise
+        </h2>
+
         {children}
       </div>
 
-      {/* RIGHT SIDE */}
-       <div className="hidden md:flex w-[40%] bg-orange-100 items-center justify-center relative overflow-hidden">
-        {/* Decorative boxes */}
-        <div className="w-40 h-40 rounded-[40px]  bg-orange-500 absolute -top-10 -left-10"></div>
-        <div className="w-40 h-40 rounded-[40px] border-4 border-green-500 absolute top-20 right-10"></div>
-        <div className="w-40 h-40 rounded-[40px] bg-amber-400 absolute bottom-10 left-10"></div>
+      {/* RIGHT */}
+      <div className="relative hidden md:flex md:w-[45%] lg:w-[40%] bg-linear-to-br from-orange-100 to-orange-200 items-center justify-center overflow-hidden">
 
-        {/* Info card */}
-        <div className="absolute top-10 left-10 z-20">
-          <div className="transition-transform duration-200 hover:scale-110">
-            <InfoIcon icon={<GoGraph />} label="Know Your Expense And Income" />
+        {/* Shapes */}
+        <div className="absolute w-24 sm:w-32 lg:w-40 h-24 sm:h-32 lg:h-40 bg-orange-500 rounded-[30px] -top-5 -left-5 opacity-80"></div>
+
+        <div className="absolute w-24 sm:w-32 lg:w-40 h-24 sm:h-32 lg:h-40 border-4 border-green-500 rounded-[30px] top-20 right-6 opacity-70"></div>
+
+        <div className="absolute w-24 sm:w-32 lg:w-40 h-24 sm:h-32 lg:h-40 bg-amber-400 rounded-[30px] bottom-6 left-6 opacity-80"></div>
+
+        {/* Info */}
+        <div className="absolute top-10 left-6 z-20">
+          <div className="transition-transform duration-300 hover:scale-110">
+            <InfoIcon
+              icon={<GoGraph />}
+              label="Track your income & expenses smartly"
+            />
           </div>
         </div>
+
         {/* Image */}
         <img
           src={Login_img}
-          alt="login"
-          className="w-[70%] max-w-md absolute bottom-10 rounded-xl shadow-lg z-10"
+          alt="visual"
+          className="w-[60%] sm:w-[65%] lg:w-[70%] max-w-md object-contain absolute bottom-6 sm:bottom-10 z-10 drop-shadow-xl"
         />
+      </div>
+
+      {/* MOBILE EXTRA */}
+      <div className="md:hidden px-4 pb-6 text-center text-sm text-gray-600 flex items-center justify-center gap-2">
+        <GoGraph />
+        <span>Manage your expenses efficiently</span>
       </div>
     </div>
   );

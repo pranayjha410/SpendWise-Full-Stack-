@@ -11,3 +11,34 @@
     color: #111827; /* dark text */
   }
 }
+
+
+@layer components {
+
+  /* Input Field */
+  .input-field {
+    @apply w-full mt-1 px-4 py-3 border border-gray-300 rounded-lg outline-none transition;
+    @apply focus:ring-2 focus:ring-orange-400 focus:border-transparent;
+  }
+
+  /* Button Primary */
+  .btn-primary {
+    @apply w-full py-3 rounded-lg font-medium text-white transition;
+    @apply bg-orange-500 hover:bg-orange-600;
+  }
+
+  /* Disabled Button */
+  .btn-disabled {
+    @apply bg-orange-300 cursor-not-allowed;
+  }
+
+  /* Error Box */
+  .error-box {
+    @apply mb-4 p-3 bg-red-100 text-red-600 text-sm rounded-lg;
+  }
+
+  /* Auth Card */
+  .auth-card {
+    @apply w-full max-w-md bg-white p-6 sm:p-8 rounded-2xl shadow-lg;
+  }
+}
