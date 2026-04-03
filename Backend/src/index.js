@@ -1,32 +1,9 @@
-
+// index.js
 import dotenv from 'dotenv';
 import connectDB from './db/index.js';
+import app from './app.js';
 
 dotenv.config();
-
-
-
-connectDB()
-.then(() =>{
-
-  // port
-  const PORT = process.env.PORT || 3000;
-  // listen
-  app.listen(PORT, () => {
-  console.log(` Server Working on Port ${PORT}`);
-})
-
-
-})
-.catch((error) =>{
-  console.log("MongoDb Error:",error)
-})
-
-// dummy data
-const expenses = [
-  { id: 1, title: "Tea", amount: 20 },
-  { id: 2, title: "Lunch", amount: 150 }
-];
 
 // routes
 app.get("/", (req, res) => {
@@ -34,10 +11,22 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/expenses", (req, res) => {
-  res.json(expenses);
+  res.json([
+    { id: 1, title: "Tea", amount: 20 },
+    { id: 2, title: "Lunch", amount: 150 }
+  ]);
 });
 
+connectDB()
+.then(() => {
+  const PORT = process.env.PORT || 3000;
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+})
 
 
-
-
+.catch((error) => {
+  console.log("MongoDb Error:", error);
+});
