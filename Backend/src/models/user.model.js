@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema(
   {
@@ -23,11 +23,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    avatar: {
+    profilePic: {
       type: String,
-      required: true,
+      default: "",
     },
-    coverImage: String,
     password: {
       type: String,
       required: true,
@@ -37,10 +36,12 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// hash password
+// Password Hashing (Before Save)
 userSchema.pre('save', async function (next) {
+  //If password is NOT changed → skip hashing
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 10);
+  //Move to next step → save to DB
   next();
 });
 
@@ -55,15 +56,6 @@ userSchema.methods.generateAccessToken = function () {
     { _id: this._id, email: this.email, username: this.username },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
-  );
-};
-
-// refresh token
-userSchema.methods.generateRefreshToken = function () {
-  return jwt.sign(
-    { _id: this._id },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
   );
 };
 
