@@ -10,12 +10,12 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.get("/api/expenses", (req, res) => {
-  res.json([
-    { id: 1, title: "Tea", amount: 20 },
-    { id: 2, title: "Lunch", amount: 150 }
-  ]);
-});
+// app.get("/api/expenses", (req, res) => {
+//   res.json([
+//     { id: 1, title: "Tea", amount: 20 },
+//     { id: 2, title: "Lunch", amount: 150 }
+//   ]);
+// });
 
 connectDB()
 .then(() => {
@@ -24,6 +24,7 @@ connectDB()
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
+  console.log("Using Mongo URI:", process.env.MONGODB_URI);
 })
 
 
