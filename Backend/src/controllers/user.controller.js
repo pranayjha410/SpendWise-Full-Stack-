@@ -4,17 +4,21 @@ import { User } from "../models/user.model.js";
 import  { ApiResponse } from "../utils/ApiResponse.js"
 
 
-const generateToken = async(userId) =>{
+// const generateToken = async(userId) =>{
 
-  try {
-    const user = await User.findById(userId);
-    const accessToken = user.generateAccessToken();
-    return accessToken;
+//   try {
+//     const user = await User.findById(userId);
+//     const accessToken = user.generateAccessToken();
+//     return accessToken;
 
-  } catch (error) {
-    throw new ApiError (500, "something Went Wrong ");
-  }
-}
+//   } catch (error) {
+//     throw new ApiError (500, "something Went Wrong ");
+//   }
+// }
+
+const generateToken = (user) => {
+  return user.generateAccessToken();
+};
 
 
 const registerUser = asyncHandler(async (req, res) => {
@@ -55,49 +59,41 @@ const registerUser = asyncHandler(async (req, res) => {
 
 });
 
-const loginUser = asyncHandler(async(req,res) =>{
-      const {email,password} = req.body;
 
-      if(!email ||   !password){
-        throw new ApiError(400,"email & Password Required")
-      }
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
 
-      const user = await User.findOne({email})
-      if(!user){
-        throw new ApiError(404,"User not Exit ")
-      }
+  if (!email || !password) {
+    throw new ApiError(400, "Email & Password required");
+  }
 
-     const isValidPassword = await user.isPasswordCorrect(password)
-     if(!isValidPassword){
-      throw new ApiError(401, " Password is Invalid")
-     }
+  const user = await User.findOne({ email }).select("+password");
+  if (!user) {
+    throw new ApiError(404, "User does not exist");
+  }
 
-       const accessToken = await ngenerateToken(user._id);
+  const isValidPassword = await user.isPasswordCorrect(password);
+  if (!isValidPassword) {
+    throw new ApiError(401, "Invalid password");
+  }
 
-       const loggedIn = await User.findById(user._id).select("-password")
+  const accessToken = generateToken(user); // no extra DB call
 
-       //send to cookie 
-     const options = {
-      //only sever can modify 
-      httpOnly:ture,
-      secure: ture
-     }
-     return res
-     .status(200)
-     .cookie("acessToken",accessToken,options)
-     .json(
-        new ApiResponse( 200, {
-        user: loggedIn, accessToken
-      }, "user Logged in Successfully"        
-    )
-     )
-})
+  user.password = undefined; // no extra DB call
+  
+  const options = { httpOnly: true, secure: true };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .json(new ApiResponse(200, { user, accessToken }, "Logged in successfully"));
+});
 
 const logoutUser = asyncHandler(async(req,res) =>{
     const options = {
       //only sever can modify 
-      httpOnly:ture,
-      secure: ture
+      httpOnly:true,
+      secure: true
      }
     return  res.status(200).clearCookie("accessToken",options).json(new ApiResponse(200,{},"user LogOut"))
 })
