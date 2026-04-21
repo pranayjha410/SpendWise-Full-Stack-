@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import  { ApiResponse } from "../utils/ApiResponse.js"
+// import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 
 // const generateToken = async(userId) =>{
@@ -22,14 +23,18 @@ const generateToken = (user) => {
 
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { fullName, email, username, password, profilePic } = req.body;
 
-  // validation
+  console.log("REGISTER API HIT");
+
+  console.log("req.body:", req.body);
+  console.log("req.file:", req.file);
+
+  const { fullName, email, username, password } = req.body;
+
   if (!fullName || !email || !username || !password) {
     throw new ApiError(400, "All fields are required");
   }
 
-  // check existing user
   const existingUser = await User.findOne({
     $or: [{ username }, { email }],
   });
@@ -38,27 +43,28 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "User already exists");
   }
 
+  let profilePicUrl = "";
+
+  if (req.file) {
+  profilePicUrl = `http://localhost:8000/uploads/${req.file.filename}`;
+}
+
+  console.log("Uploaded URL:", profilePicUrl); // ✅ NOW correct
+
   const user = await User.create({
     fullName,
     email,
     username: username.toLowerCase(),
     password,
-    profilePic,
+    profilePic: profilePicUrl,
   });
 
-  //without password, unliike above
-    const createdUser = await User.findById(user._id).select("-password")
+  const createdUser = await User.findById(user._id).select("-password");
 
-    if(!createdUser){
-        throw new ApiError(500,"Something Went Wrong")
-    }
-
-    return res.status(201).json(
-      new ApiResponse(200,createdUser, "Registered Successfully")
-    )
-
+  return res.status(201).json(
+    new ApiResponse(200, createdUser, "Registered Successfully")
+  );
 });
-
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
