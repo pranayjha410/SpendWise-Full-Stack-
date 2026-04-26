@@ -1,9 +1,11 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import userRouter from "./routes/user.routes.js";  // ← move here
 import path from "path";
 import { fileURLToPath } from "url";
+import userRouter from "./routes/user.routes.js"; 
+import incomeRouter from "./routes/income.routes.js"; 
+
 const app = express();
 
 app.use(cors({
@@ -17,7 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-app.use("/api/v1/user", userRouter);  
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/income", incomeRouter);  
+
 
 //server uploads folder
 const __filename = fileURLToPath(import.meta.url);

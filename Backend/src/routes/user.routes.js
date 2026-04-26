@@ -7,8 +7,7 @@ import { upload } from "../middlewares/uploadMiddlewares.js";
     
 const router = Router();   
 
-router.post("/register", registerUser);
-
+router.post("/register", upload.single("profilePic"), registerUser);
 router.post("/login",loginUser);
 
 router.post("/logout",verifyJWT,logoutUser)
