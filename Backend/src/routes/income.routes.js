@@ -7,11 +7,12 @@ const router = Router();
 
 router.post("/add",verifyJWT,addIncome);
 router.get("/get",verifyJWT,getAllIncomes);
-router.get("/getone",verifyJWT,getIncome);
 router.get("/downloadexcel",verifyJWT,downloadIncomeExcel);
-router.put("/update",verifyJWT,updateIncome);
 
-router.delete("/:id",verifyJWT,deleteIncome);
+router.get("/get/:id",verifyJWT,getIncome);
+router.put("/get/:id",verifyJWT,updateIncome);
+
+router.delete("/get/:id",verifyJWT,deleteIncome);
 
 
 export default router

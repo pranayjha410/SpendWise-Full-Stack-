@@ -4,6 +4,8 @@
   import { User } from "../models/user.model.js";
   // import { use } from "react";
 
+
+  //  it protects routes by verifying that the incoming request has a valid token.
   export const verifyJWT = asyncHandler(async (req, res, next) => {
     try {
       const token =
