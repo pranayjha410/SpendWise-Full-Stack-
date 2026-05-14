@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import userRouter from "./routes/user.routes.js"; 
 import incomeRouter from "./routes/income.routes.js"; 
 import expenseRouter from "./routes/expense.routes.js"
+import dashboardRouter from "./routes/dashboard.routes.js"
 
 const app = express();
 
@@ -23,6 +24,8 @@ app.use(cookieParser());
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/income", incomeRouter);  
 app.use("/api/v1/expense", expenseRouter);  
+app.use("/api/v1/dashboard", dashboardRouter);  
+
 
 
 
