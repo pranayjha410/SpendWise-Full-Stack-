@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000/api/v1";
+ export const BASE_URL = "http://localhost:8000/api/v1";
 
 export const API_PATHS = {
   AUTH: {
@@ -20,10 +20,10 @@ export const API_PATHS = {
   EXPENSE: {
     ADD: `${BASE_URL}/income/add`,
     GET_ALL: `${BASE_URL}/income/get`,
-    GET_ONE: (expenseid) => `${BASE_URL}/income/get/${expenseid}`,
-    UPDATE: (expenseid) => `${BASE_URL}/income/get/${expenseid}`,
-    DELETE: (expenseid) => `${BASE_URL}/income/get/${expenseid}`,
-    DOWNLOAD_EXPENSE: `${BASE_URL}/income/downloadexcel`,
+    GET_ONE: (expenseid) => `${BASE_URL}/expense/get/${expenseid}`,
+    UPDATE: (expenseid) => `${BASE_URL}/expense/get/${expenseid}`,
+    DELETE: (expenseid) => `${BASE_URL}/expense/get/${expenseid}`,
+    DOWNLOAD_EXPENSE: `${BASE_URL}/expense/downloadexcel`,
   },
   
   IMAGE:{

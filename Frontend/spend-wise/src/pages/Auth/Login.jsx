@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../components/layouts/AuthLayout";
-
+import { API_PATHS } from "../../utils/apiPaths";
+import axiosInstance from "../../utils/axiosInstance";
 const Login = () => {
   const navigate = useNavigate();
 
@@ -14,7 +15,7 @@ const Login = () => {
     return /\S+@\S+\.\S+/.test(email);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async(e) => {
     e.preventDefault();
     setError("");
 
@@ -27,16 +28,33 @@ const Login = () => {
       setError("Password must be at least 6 characters");
       return;
     }
-      //loading (for login)
+    //loading (for login)
     setLoading(true);
 
-    setTimeout(() => {
-      localStorage.setItem("token", "123");
-      setLoading(false);
-      navigate("/dashboard");
-    }, 800);
+    // setTimeout(() => {
+    //   localStorage.setItem("token", "123");
+    //   setLoading(false);
+    //   navigate("/dashboard");
+    // }, 800);
 
-    
+    //Api call acutal
+    try {
+      const { data } =  await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password
+      });
+      localStorage.setItem("token", data.data.accessToken);
+      navigate("/dashboard");
+
+    }
+    catch (err) {
+      setError(err.response?.data?.message || "Login failed, try again");
+    }
+    finally {
+      setLoading(false);
+    }
+
+
   };
 
   return (
