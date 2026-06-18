@@ -1,20 +1,24 @@
+import dotenv from 'dotenv';
+dotenv.config({ path: './.env' }); 
+
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import { fileURLToPath } from "url";
-import userRouter from "./routes/user.routes.js"; 
-import incomeRouter from "./routes/income.routes.js"; 
-import expenseRouter from "./routes/expense.routes.js"
-import dashboardRouter from "./routes/dashboard.routes.js"
+import userRouter from "./routes/user.routes.js";
+import incomeRouter from "./routes/income.routes.js";
+import expenseRouter from "./routes/expense.routes.js";
+import dashboardRouter from "./routes/dashboard.routes.js";
 
 const app = express();
-
-app.use(cors({
-  origin: process.env.CORS_ORIGIN,
-  credentials: true,
-  methods: ["GET","POST","PUT","DELETE"]
-}));
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -22,17 +26,9 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 app.use("/api/v1/user", userRouter);
-app.use("/api/v1/income", incomeRouter);  
-app.use("/api/v1/expense", expenseRouter);  
-app.use("/api/v1/dashboard", dashboardRouter);  
-
-
-
-
-
-
-
-
+app.use("/api/v1/income", incomeRouter);
+app.use("/api/v1/expense", expenseRouter);
+app.use("/api/v1/dashboard", dashboardRouter);
 
 //server uploads folder
 const __filename = fileURLToPath(import.meta.url);
