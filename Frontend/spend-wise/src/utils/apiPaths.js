@@ -5,6 +5,7 @@ export const API_PATHS = {
     REGISTER: `${BASE_URL}/user/register`,
     LOGIN:    `${BASE_URL}/user/login`,
     LOGOUT:   `${BASE_URL}/user/logout`,
+    GET_USER: `${BASE_URL}/user/me`, 
   },
   DASHBOARD: {
     GET: `${BASE_URL}/dashboard`,

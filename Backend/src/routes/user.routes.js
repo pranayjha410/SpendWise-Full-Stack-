@@ -2,6 +2,7 @@ import {Router} from "express";
 import { registerUser } from "../controllers/user.controller.js";
 import { loginUser } from "../controllers/user.controller.js";
 import { logoutUser } from "../controllers/user.controller.js";
+import { getCurrentUser } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/authMiddlewares.js";
 import { upload } from "../middlewares/uploadMiddlewares.js";
     
@@ -11,6 +12,7 @@ router.post("/register", upload.single("profilePic"), registerUser);
 router.post("/login",loginUser);
 
 router.post("/logout",verifyJWT,logoutUser)
+router.get('/me', verifyJWT, getCurrentUser);
 
 router.post("/upload-image", upload.single("profilePic"), (req,res)=>{
     if(!req.file){

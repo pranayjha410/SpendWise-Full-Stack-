@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import { API_PATHS } from "../../utils/apiPaths";
 import axiosInstance from "../../utils/axiosInstance";
 const Login = () => {
   const navigate = useNavigate();
+  const { updateUser } = useContext(UserContext);
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,7 +45,10 @@ const Login = () => {
         email,
         password
       });
+
       localStorage.setItem("token", data.data.accessToken);
+      //usecontex
+       updateUser(data.data.user);
       navigate("/dashboard");
 
     }
