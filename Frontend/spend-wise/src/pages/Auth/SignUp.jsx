@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../components/layouts/AuthLayout";
-import ProfilePhoto from "../../components/Inputs/ProfilePhoto";
-
+import ProfilePhoto from "../../utils/ProfilePhoto";
+import axiosInstance from "../../utils/axiosInstance";
+import { UserContext } from "../../context/UserContext";
+import { API_PATHS } from "../../utils/apiPaths";
 const SignUp = () => {
   const navigate = useNavigate();
-
+  const { updateUser } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
   const [name, setName] = useState("");
   const [userName, setUserName] = useState("");
@@ -20,7 +22,7 @@ const SignUp = () => {
     return /\S+@\S+\.\S+/.test(email);
   };
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -52,18 +54,77 @@ const SignUp = () => {
     // Fake API call
     setLoading(true);
 
-    setTimeout(() => {
-      console.log({
-        profile,
-        name,
-        userName,
-        email,
-        password,
-      });
+    // setTimeout(() => {
+    //   console.log({
+    //     profile,
+    //     name,
+    //     userName,
+    //     email,
+    //     password,
+    //   });
 
+    //   setLoading(false);
+    //   navigate("/dashboard");
+    // }, 1000);
+
+    try {
+       let profilePicUrl = "";
+       // Step 1 — upload image first if user selected one
+       
+    if (profile) {
+  const imageFormData = new FormData();
+  imageFormData.append("profilePic", profile);
+  console.log("profile instanceof File:", profile instanceof File);
+  console.log("profile name:", profile?.name);
+  console.log("profile size:", profile?.size);
+  console.log("FormData entries:");
+  for (let [key, value] of imageFormData.entries()) {
+    console.log(key, value);
+  }
+
+  const uploadRes = await axiosInstance.post(
+    API_PATHS.IMAGE.UPLOAD_IMAGE,
+    imageFormData   // ← no headers, browser handles it
+  );
+
+  profilePicUrl = uploadRes.data.imageUrl;
+}
+
+    const { data } = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+      fullName: name,
+      username: userName,
+      email,
+      password,
+      profilePic: profilePicUrl, // ← string URL now
+    });
+
+    navigate("/login");
+      // const formData = new FormData();
+      // formData.append("fullName", name);
+      // formData.append("username", userName);
+      // formData.append("email", email);
+      // formData.append("password", password);
+      // if (profile instanceof File) {
+      //   formData.append("profilePic", profile);  // ← key must match multer's field name
+      // }
+      // const { data } = await axiosInstance.post(API_PATHS.AUTH.REGISTER, formData, {
+      //   headers: { "Content-Type": "multipart/form-data" }, // important for converting img into json
+      // });
+      // if (data.data.accessToken) {
+      //   localStorage.setItem("token", data.data.accessToken);
+      //   updateUser(data.data.user);
+      // }
+      // //once signup 
+      // navigate("/login");
+    }
+    catch (err) {
+      console.log(err);
+      console.log(err.response);
+      console.log(err.response?.data);
+      setError(err.response?.data?.message || "Signup failed, try again");
+    } finally {
       setLoading(false);
-      navigate("/dashboard");
-    }, 1000);
+    }
   };
 
   return (

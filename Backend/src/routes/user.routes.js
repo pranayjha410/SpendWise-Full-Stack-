@@ -1,26 +1,29 @@
-import {Router} from "express";
-import { registerUser } from "../controllers/user.controller.js";
-import { loginUser } from "../controllers/user.controller.js";
-import { logoutUser } from "../controllers/user.controller.js";
-import { getCurrentUser } from "../controllers/user.controller.js";
+import { Router } from "express";
+import { registerUser, loginUser, logoutUser, getCurrentUser } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/authMiddlewares.js";
 import { upload } from "../middlewares/uploadMiddlewares.js";
-    
-const router = Router();   
 
-router.post("/register", upload.single("profilePic"), registerUser);
-router.post("/login",loginUser);
+const router = Router();
 
-router.post("/logout",verifyJWT,logoutUser)
-router.get('/me', verifyJWT, getCurrentUser);
+// public routes
+router.post("/register", registerUser);         
+router.post("/login", loginUser);
 
-router.post("/upload-image", upload.single("profilePic"), (req,res)=>{
-    if(!req.file){
-            return res.status(400).json({message: "NO file uploaded"})
-    }
-    const imageUrl =  `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
-    res.status(200).json({imageUrl})
+// protected routes
+router.post("/logout", verifyJWT, logoutUser);
+router.get("/me", verifyJWT, getCurrentUser);
+
+// image upload
+router.post("/upload-image", upload.single("profilePic"), (req, res) => {
+    console.log("req.file:", req.file);       // ← add
+  console.log("req.body:", req.body);       // ← add
+  console.log("req.headers:", req.headers); // ← add
+
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+  const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+  res.status(200).json({ imageUrl });
 });
 
-
-export default router
+export default router;

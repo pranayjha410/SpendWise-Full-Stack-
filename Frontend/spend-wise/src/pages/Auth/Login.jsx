@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import { API_PATHS } from "../../utils/apiPaths";
 import axiosInstance from "../../utils/axiosInstance";
+import { UserContext } from "../../context/UserContext";
 const Login = () => {
   const navigate = useNavigate();
   const { updateUser } = useContext(UserContext);
