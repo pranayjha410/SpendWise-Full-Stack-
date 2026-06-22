@@ -10,9 +10,9 @@ router.get("/get",verifyJWT,getAllIncomes);
 router.get("/downloadexcel",verifyJWT,downloadIncomeExcel);
 
 router.get("/get/:id",verifyJWT,getIncome);
-router.put("/get/:id",verifyJWT,updateIncome);
+router.put("/update/:id",verifyJWT,updateIncome);
 
-router.delete("/get/:id",verifyJWT,deleteIncome);
+router.delete("/delete/:id",verifyJWT,deleteIncome);
 
 
 export default router

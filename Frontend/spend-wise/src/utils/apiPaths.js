@@ -14,8 +14,8 @@ export const API_PATHS = {
     ADD:             `${BASE_URL}/income/add`,
     GET_ALL:         `${BASE_URL}/income/get`,
     GET_ONE:         (id) => `${BASE_URL}/income/get/${id}`,
-    UPDATE:          (id) => `${BASE_URL}/income/update/${id}`,  // ✅ fixed
-    DELETE:          (id) => `${BASE_URL}/income/delete/${id}`,  // ✅ fixed
+    UPDATE:          (id) => `${BASE_URL}/income/update/${id}`,  
+    DELETE:          (id) => `${BASE_URL}/income/delete/${id}`, 
     DOWNLOAD_INCOME: `${BASE_URL}/income/downloadexcel`,
   },
   EXPENSE: {

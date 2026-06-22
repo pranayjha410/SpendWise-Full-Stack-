@@ -1,0 +1,62 @@
+import { getCategoryIcon } from "../../utils/categoryIcons";
+import CustomBarChart from "../Charts/CustomBarChart";
+
+const LastIncomeDetails = ({ last45Days }) => {
+  // filter only income from last45Days transactions
+  const incomeTransactions = (last45Days?.transactions || [])
+    .filter((txn) => txn.type === "income")
+    .slice(0, 5); // last 5
+
+  // prepare bar chart data
+  const chartData = incomeTransactions.map((txn) => ({
+    name: txn.category || txn.title,
+    amount: txn.amount,
+  }));
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm p-5">
+
+      {/* Header */}
+      <h3 className="text-lg font-semibold text-gray-700 mb-4">Last Income Details</h3>
+
+      {incomeTransactions.length === 0 ? (
+        <p className="text-gray-400 text-sm text-center py-6">No income in last 45 days</p>
+      ) : (
+        <>
+          {/* Bar Chart */}
+          <CustomBarChart data={chartData} color="#22c55e" />
+
+          {/* Transaction list */}
+          <div className="flex flex-col gap-3 mt-4">
+            {incomeTransactions.map((txn) => {
+              const Icon = getCategoryIcon(txn.category);
+              return (
+                <div
+                  key={txn._id}
+                  className="flex items-center justify-between border-b last:border-0 pb-3 last:pb-0"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                      <Icon size={14} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-700">{txn.title}</p>
+                      <p className="text-xs text-gray-400">
+                        {txn.category} • {new Date(txn.date).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-sm font-semibold text-green-600">
+                    +₹{txn.amount.toLocaleString()}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default LastIncomeDetails;
