@@ -10,9 +10,9 @@ router.get("/get",verifyJWT,getAllExpense);
 router.get("/downloadexcel",verifyJWT,downloadExpenseExcel);
 
 router.get("/get/:id",verifyJWT,getExpense);
-router.put("/get/:id",verifyJWT,updateExpense);
+router.put("/update/:id",verifyJWT,updateExpense);
 
-router.delete("/get/:id",verifyJWT,deleteExpense);
+router.delete("/delete/:id",verifyJWT,deleteExpense);
 
 
 export default router

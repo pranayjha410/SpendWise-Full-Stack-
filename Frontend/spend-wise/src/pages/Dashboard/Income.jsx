@@ -5,12 +5,13 @@ import { API_PATHS } from "../../utils/apiPaths";
 import IncomeOverview from "../../components/Income/IncomeOverview";
 import AddIncomeForm from "../../components/Income/AddIncomeForm";
 import IncomeList from "../../components/Income/IncomeList";
-
+import DeleteConfirmModal from "../../components/Cards/DeleteConfirmModal";
 const Income = () => {
   const [incomes, setIncomes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editIncome, setEditIncome] = useState(null);
+    const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
     fetchIncomes();
@@ -30,16 +31,18 @@ const Income = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this income?")) return;
-    try {
-      await axiosInstance.delete(
-        API_PATHS.INCOME.DELETE(id)
-      );
+   const handleDeleteClick = (id) => {
+    setDeleteId(id); //  show modal
+  };
 
+  const handleDeleteConfirm = async () => {
+    try {
+      await axiosInstance.delete(API_PATHS.INCOME.DELETE(deleteId));
       fetchIncomes();
     } catch (err) {
-      console.error("Failed to delete income:", err);
+      console.error("Failed to delete:", err);
+    } finally {
+      setDeleteId(null); //  close modal
     }
   };
 
@@ -82,10 +85,18 @@ const Income = () => {
           ) : (
             <IncomeList
               incomes={incomes}
-              onDelete={handleDelete}
+               onDelete={handleDeleteClick}
               onEdit={handleEdit}
             />
           )}
+          {/* Delete Modal */}
+      {deleteId && (
+        <DeleteConfirmModal
+          message="This income record will be permanently deleted."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setDeleteId(null)}
+        />
+      )}
         </div>
 
         {/* Download Excel */}
