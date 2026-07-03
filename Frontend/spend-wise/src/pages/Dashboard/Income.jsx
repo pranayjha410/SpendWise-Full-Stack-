@@ -6,12 +6,13 @@ import IncomeOverview from "../../components/Income/IncomeOverview";
 import AddIncomeForm from "../../components/Income/AddIncomeForm";
 import IncomeList from "../../components/Income/IncomeList";
 import DeleteConfirmModal from "../../components/Cards/DeleteConfirmModal";
+import { FaDownload } from "react-icons/fa";
 const Income = () => {
   const [incomes, setIncomes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editIncome, setEditIncome] = useState(null);
-    const [deleteId, setDeleteId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
     fetchIncomes();
@@ -19,9 +20,7 @@ const Income = () => {
 
   const fetchIncomes = async () => {
     try {
-      const { data } = await axiosInstance.get(
-        API_PATHS.INCOME.GET_ALL
-      );
+      const { data } = await axiosInstance.get(API_PATHS.INCOME.GET_ALL);
 
       setIncomes(data.data || []);
     } catch (err) {
@@ -31,7 +30,7 @@ const Income = () => {
     }
   };
 
-   const handleDeleteClick = (id) => {
+  const handleDeleteClick = (id) => {
     setDeleteId(id); //  show modal
   };
 
@@ -51,14 +50,35 @@ const Income = () => {
     setShowAddForm(true);
   };
 
+  const handleDownload = async () => {
+    try {
+      const response = await axiosInstance.get(
+        API_PATHS.INCOME.DOWNLOAD_INCOME,
+        {
+          responseType: "blob", //  important! tells axios to expect a file
+        },
+      );
+
+      // create a download link programmatically
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "incomes.xlsx"); //  filename
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url); // cleanup
+    } catch (err) {
+      console.error("Download failed:", err);
+    }
+  };
+
   return (
     <DashboardLayout activeMenu="Income">
       <div className="my-5 mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Income
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-800">Income</h2>
 
           <button
             onClick={() => {
@@ -79,35 +99,32 @@ const Income = () => {
           {loading ? (
             <p className="text-gray-400">Loading...</p>
           ) : incomes.length === 0 ? (
-            <p className="text-gray-500">
-              No income records found.
-            </p>
+            <p className="text-gray-500">No income records found.</p>
           ) : (
             <IncomeList
               incomes={incomes}
-               onDelete={handleDeleteClick}
+              onDelete={handleDeleteClick}
               onEdit={handleEdit}
             />
           )}
           {/* Delete Modal */}
-      {deleteId && (
-        <DeleteConfirmModal
-          message="This income record will be permanently deleted."
-          onConfirm={handleDeleteConfirm}
-          onCancel={() => setDeleteId(null)}
-        />
-      )}
+          {deleteId && (
+            <DeleteConfirmModal
+              message="This income record will be permanently deleted."
+              onConfirm={handleDeleteConfirm}
+              onCancel={() => setDeleteId(null)}
+            />
+          )}
         </div>
 
         {/* Download Excel */}
-        <div className="mt-6">
-          <a
-            href={API_PATHS.INCOME.DOWNLOAD_INCOME}
-            className="text-sm text-orange-500 hover:underline font-medium"
-          >
-            ⬇ Download as Excel
-          </a>
-        </div>
+        <button
+          onClick={handleDownload}
+          className="flex items-center gap-2 text-sm text-orange-500 hover:underline font-medium mt-6"
+        >
+          <FaDownload size={13} />
+          Download as Excel
+        </button>
       </div>
 
       {/* Add / Edit Modal */}

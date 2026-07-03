@@ -6,6 +6,7 @@ import ExpenseOverview from "../../components/Expense/ExpenseOverview";
 import ExpenseList from "../../components/Expense/ExpenseList";
 import AddExpenseForm from "../../components/Expense/AddExpenseForm";
 import DeleteConfirmModal from "../../components/Cards/DeleteConfirmModal";
+import { FaDownload } from "react-icons/fa";
 
 const Expense = () => {
   const [expenses, setExpenses] = useState([]);
@@ -44,16 +45,39 @@ const Expense = () => {
       setDeleteId(null);
     }
   };
+  const handleDownload = async () => {
+    try {
+      const response = await axiosInstance.get(
+        API_PATHS.EXPENSE.DOWNLOAD_EXPENSE,
+        {
+          responseType: "blob",
+        },
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "expenses.xlsx"); //  different filename
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download failed:", err);
+    }
+  };
 
   return (
     <DashboardLayout activeMenu="Expense">
       <div className="my-5 mx-auto">
-
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Expense</h2>
           <button
-            onClick={() => { setEditExpense(null); setShowAddForm(true); }}
+            onClick={() => {
+              setEditExpense(null);
+              setShowAddForm(true);
+            }}
             className="btn-primary"
           >
             + Add Expense
@@ -75,13 +99,13 @@ const Expense = () => {
         )}
 
         {/* Download */}
-        <div className="mt-6">
-          <a href={API_PATHS.EXPENSE.DOWNLOAD_EXPENSE}
-            className="text-sm text-orange-500 hover:underline font-medium">
-            ⬇ Download as Excel
-          </a>
-        </div>
-
+        <button
+          onClick={handleDownload}
+          className="flex items-center gap-2 text-sm text-orange-500 hover:underline font-medium mt-6"
+        >
+          <FaDownload size={13} />
+          Download as Excel
+        </button>
       </div>
 
       {/* Add/Edit Modal */}
@@ -89,7 +113,10 @@ const Expense = () => {
         <AddExpenseForm
           editData={editExpense}
           onSuccess={fetchExpenses}
-          onClose={() => { setShowAddForm(false); setEditExpense(null); }}
+          onClose={() => {
+            setShowAddForm(false);
+            setEditExpense(null);
+          }}
         />
       )}
 
@@ -101,7 +128,6 @@ const Expense = () => {
           onCancel={() => setDeleteId(null)}
         />
       )}
-
     </DashboardLayout>
   );
 };

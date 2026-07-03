@@ -10,7 +10,6 @@ const SignUp = () => {
   const { updateUser } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
   const [name, setName] = useState("");
-  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,10 +25,7 @@ const SignUp = () => {
     e.preventDefault();
     setError("");
 
-    if (!userName.trim()) {
-      setError("Username is required");
-      return;
-    }
+   
 
     if (!name.trim()) {
       setError("Name is required");
@@ -92,7 +88,6 @@ const SignUp = () => {
 
     const { data } = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
       fullName: name,
-      username: userName,
       email,
       password,
       profilePic: profilePicUrl, // ← string URL now
@@ -149,7 +144,7 @@ const SignUp = () => {
             {error && <div className="error-box">{error}</div>}
 
             {/* Username */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="text-sm text-gray-600">Username</label>
               <input
                 type="text"
@@ -158,7 +153,7 @@ const SignUp = () => {
                 onChange={(e) => setUserName(e.target.value)}
                 placeholder="Enter username"
               />
-            </div>
+            </div> */}
 
             {/* Name */}
             <div className="mb-4">
