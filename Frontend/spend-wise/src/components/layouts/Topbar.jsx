@@ -4,7 +4,7 @@ import { FaBars } from "react-icons/fa";
 
 const Topbar = ({ onMenuClick }) => {
   const { user } = useContext(UserContext);
-  console.log("user:", user);        // ← add this
+  console.log("user:", user);       
   console.log("profilePic:", user?.profilePic);
   return (
     <div className="h-16 bg-white border-b flex items-center justify-between px-4 md:px-6">
