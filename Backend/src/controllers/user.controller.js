@@ -21,13 +21,12 @@ const generateToken = (user) => {
   return user.generateAccessToken();
 };
 
+const getProfileImageUrl = (req) => {
+  return `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+};
+
 
 const registerUser = asyncHandler(async (req, res) => {
-
-  console.log("REGISTER API HIT");
-
-  console.log("req.body:", req.body);
-  console.log("req.file:", req.file);
 
   const { fullName, email, password, profilePic  } = req.body;
 
@@ -46,17 +45,15 @@ const registerUser = asyncHandler(async (req, res) => {
   let profilePicUrl = "";
 
   if (req.file) {
-  profilePicUrl = `http://localhost:8000/uploads/${req.file.filename}`;
-}
-
-  console.log("Uploaded URL:", profilePicUrl); // ✅ NOW correct
+    profilePicUrl = getProfileImageUrl(req);
+  }
 
   const user = await User.create({
     fullName,
     email,
   
     password,
-     profilePic: profilePic || "",
+     profilePic: profilePicUrl || profilePic || "",
   });
 
   const createdUser = await User.findById(user._id).select("-password");

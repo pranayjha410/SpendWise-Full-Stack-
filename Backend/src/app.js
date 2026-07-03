@@ -4,12 +4,11 @@ dotenv.config({ path: './.env' });
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import path from "path";
-import { fileURLToPath } from "url";
 import userRouter from "./routes/user.routes.js";
 import incomeRouter from "./routes/income.routes.js";
 import expenseRouter from "./routes/expense.routes.js";
 import dashboardRouter from "./routes/dashboard.routes.js";
+import { UPLOAD_DIR } from "./utils/uploadPath.js";
 
 const app = express();
 app.use(
@@ -30,8 +29,6 @@ app.use("/api/v1/income", incomeRouter);
 app.use("/api/v1/expense", expenseRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
-//server uploads folder
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// Serve the same directory where Multer stores uploaded profile images.
+app.use("/uploads", express.static(UPLOAD_DIR));
 export default app;

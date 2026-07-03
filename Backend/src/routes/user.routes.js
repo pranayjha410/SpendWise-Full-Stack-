@@ -15,10 +15,6 @@ router.get("/me", verifyJWT, getCurrentUser);
 
 // image upload
 router.post("/upload-image", upload.single("profilePic"), (req, res) => {
-    console.log("req.file:", req.file);       // ← add
-  console.log("req.body:", req.body);       // ← add
-  console.log("req.headers:", req.headers); // ← add
-
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }
