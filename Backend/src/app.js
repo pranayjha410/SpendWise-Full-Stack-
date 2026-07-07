@@ -31,4 +31,16 @@ app.use("/api/v1/dashboard", dashboardRouter);
 
 // Serve the same directory where Multer stores uploaded profile images.
 app.use("/uploads", express.static(UPLOAD_DIR));
+
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+    errors: err.errors || [],
+  });
+});
 export default app;
