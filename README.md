@@ -73,7 +73,7 @@ SpendWise is a full-stack MERN (MongoDB, Express.js, React, Node.js) personal fi
 
 ---
 
-# 🏗 Architecture
+#  Architecture
 
 ```
 Frontend (React)
@@ -96,7 +96,7 @@ MongoDB Atlas
 
 ---
 
-# 📂 Project Structure
+#  Project Structure
 
 ```
 SpendWise-Full-Stack
@@ -151,7 +151,7 @@ npm run dev
 
 ---
 
-# 🔑 Environment Variables
+# Environment Variables
 
 ## Backend (.env)
 
@@ -171,7 +171,7 @@ VITE_API_BASE_URL=
 
 ---
 
-# 📌 API Endpoints
+#  API Endpoints
 
 ## Authentication
 
@@ -245,7 +245,7 @@ During this project I learned:
 
 ---
 
-# 👨‍💻 Author
+#  Author
 
 **Pranay Jha**
 
